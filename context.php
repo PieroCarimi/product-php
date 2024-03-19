@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 interface TContext {
     public function addToCart($idProduct);
     public function removeFromCart($idProduct);
@@ -96,9 +98,14 @@ class AppContext implements TContext {
     private function getProducts() {
         $this->loading = true;
         try {
-            $response = file_get_contents("https://mockend.up.railway.app/api/products");
-            $data = json_decode($response, true);
-            $this->products = $data;
+            if(isset($_SESSION['products'])) {
+                $this->products = $_SESSION['products'];
+            }else{
+                $response = file_get_contents("https://mockend.up.railway.app/api/products");
+                $data = json_decode($response, true);
+                $this->products = $data;
+                $_SESSION['products'] = $this->products;
+            }
             $this->loading = false;
         } catch (Exception $e) {
             $this->error = $e->getMessage();
