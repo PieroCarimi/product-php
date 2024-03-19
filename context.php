@@ -20,8 +20,19 @@ class AppContext implements TContext {
 
     private $router;
 
+    private function saveCartToSession() {
+        $_SESSION['cart'] = $this->cart;
+    }
+
+    private function loadCartFromSession() {
+        if (isset($_SESSION['cart'])) {
+            $this->cart = $_SESSION['cart'];
+        }
+    }
+
     public function __construct($router) {
         $this->router = $router;
+        $this->loadCartFromSession();
         $this->getProducts();
     }
 
@@ -50,6 +61,7 @@ class AppContext implements TContext {
                 }
             }
         }
+        $this->saveCartToSession();
     }
     
     public function removeFromCart($idProduct) {
@@ -63,11 +75,13 @@ class AppContext implements TContext {
                 break;
             }
         }
+        $this->saveCartToSession();
     }
     
     public function pay() {
         $this->paid = true;
         $this->cart = [];
+        $this->saveCartToSession();
     }
     
     public function done() {
@@ -121,6 +135,3 @@ class Router {
         $this->pathname = $pathname;
     }
 }
-
-$router = new Router("/");  
-$appContext = new AppContext($router);

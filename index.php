@@ -42,7 +42,7 @@
                     echo '</div>';
                     echo '<div class="ContainerPriceQty">';
                     echo '<p class="Price">' . $product['price'] . ' €</p>';
-                    echo '<p class="Quantity">Disponibili: ' . $product['qty'] . '</p>';
+                    echo '<p class="Quantity">Disponibili: ' . '<span id="available-qty">' . $product['qty'] . '</span></p>';
                     echo '</div>';
                     echo '<div class="DivCart" onClick="' . $appContext->addToCart($product['id']) . '"';
                     if ($product['qty'] === 0) {
